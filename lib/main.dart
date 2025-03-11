@@ -50,20 +50,41 @@ bool _agreementAd = true;
                         const Text("Масса объекта, кг",
              style: TextStyle(fontSize: 20, color: Colors.purple),
              ), ),
-
-            TextFormField(validator: (value) {
-              if (value!.isEmpty) return "Введите значение массы";
-              if (double.parse(_fieldWeight.text)<=0) return "Масса должна быть не меньше 0";
-            }, controller: _fieldWeight, keyboardType: TextInputType.numberWithOptions()),
-            Padding(padding: EdgeInsets.only(top: 20), child:
-                        const Text("Скорость объекта, м/с",
-             style: TextStyle(fontSize: 20, color: Colors.purple),
-             ), ),
-
-            TextFormField(validator: (value) {
-              if (value!.isEmpty) return "Введите значение скорости";
-              if (double.parse(_fieldSpeed.text)<=0) return "Скорость должна быть не меньше 0";
-            }, controller: _fieldSpeed, keyboardType: TextInputType.numberWithOptions(),),
+            TextFormField(
+              validator: (value) {
+                if (value!.isEmpty) return "Введите значение массы";
+                try {
+                  double mass = double.parse(value);
+                  if (mass <= 0) return "Масса должна быть больше 0";
+                } catch (e) {
+                  return "Введите корректное число для массы";
+                }
+                return null; // Возвращаем null, если ошибок нет
+              },
+              controller: _fieldWeight,
+              keyboardType: TextInputType.number,
+            ),
+            Padding(
+              padding: EdgeInsets.only(top: 20),
+              child: const Text(
+                "Скорость объекта, м/с",
+                style: TextStyle(fontSize: 20, color: Colors.purple),
+              ),
+            ),
+            TextFormField(
+              validator: (value) {
+                if (value!.isEmpty) return "Введите значение скорости";
+                try {
+                  double speed = double.parse(value);
+                  if (speed <= 0) return "Скорость должна быть больше 0";
+                } catch (e) {
+                  return "Введите корректное число для скорости";
+                }
+                return null; // Возвращаем null, если ошибок нет
+              },
+              controller: _fieldSpeed,
+              keyboardType: TextInputType.number,
+            ),
             CheckboxListTile(value: _agreementDataProcessing, 
             title: Text("Я готов слить свои данные за 0 рублей в общий доступ"),
             onChanged: (bool? value) => setState(() => _agreementDataProcessing = value!)),
@@ -71,8 +92,7 @@ bool _agreementAd = true;
             ElevatedButton(onPressed: () {
               if (_formKey.currentState!.validate() & _agreementDataProcessing)
               {
-                energy = KineticEnergy(double.parse(_fieldWeight.text), double.parse(_fieldSpeed.text));
-                Navigator.push(context, MaterialPageRoute(builder: (context) => SecondScreen(energy: energy)));
+                Navigator.push(context, MaterialPageRoute(builder: (context) => SecondScreen(mass: double.parse(_fieldWeight.text), speed: double.parse(_fieldSpeed.text))));
               }
             }, child: const Text("Вычислить"))
           ],
@@ -84,17 +104,36 @@ bool _agreementAd = true;
 }
 
 class SecondScreen extends StatelessWidget {
-  double energy;
-  SecondScreen({required this.energy});
+  double mass, speed;
+  SecondScreen({required this.mass, required this.speed});
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: Text("Кинетическая энергия " + energy.toString() + " Дж"),
+          title: Text("Кинетическая энергия"),
         ),
         body: Center(
-          child: ElevatedButton(onPressed: () {Navigator.pop(context);}, child: Text("Закрыть экран"))
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+            Padding(padding: EdgeInsets.only(top: 20), child:
+                        Text("Скорость объекта: $speed м/с",
+             style: TextStyle(fontSize: 20, color: Colors.purple),
+             ), ),
+            Padding(padding: EdgeInsets.only(top: 20), child:
+                        Text("Масса объекта: $mass кг",
+             style: TextStyle(fontSize: 20, color: Colors.purple),
+             ), ),
+            Padding(padding: EdgeInsets.only(top: 20), child:
+                        Text("Кинетическая энергия объекта: ${KineticEnergy(mass, speed)} ДЖ",
+             style: TextStyle(fontSize: 20, color: Colors.purple),
+             ), ),
+             Padding(padding: EdgeInsets.only(top: 20), child:
+            ElevatedButton(onPressed: () {Navigator.pop(context);}, child: Text("Закрыть экран"))),
+
+            ],
+          ) 
         ),
       ),
     );
