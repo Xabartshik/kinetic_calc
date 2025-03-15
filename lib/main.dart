@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'second_screen.dart';
 void main() {
   runApp(const MainApp());
 }
@@ -27,17 +27,13 @@ class KineticEnergyForm extends StatefulWidget {
   @override
   _KineticEnergyFormState createState() => _KineticEnergyFormState();
 }
-double KineticEnergy(double mass, double speed)
-{
-  return mass*speed*speed/2;
-}
+
 class _KineticEnergyFormState extends State<KineticEnergyForm>{
 final _formKey = GlobalKey<FormState>();
 final _fieldWeight = TextEditingController();
 final _fieldSpeed = TextEditingController();
 double energy = 0;
 bool _agreementDataProcessing = false;
-bool _agreementAd = true;
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.all(8),
@@ -103,39 +99,3 @@ bool _agreementAd = true;
   }
 }
 
-class SecondScreen extends StatelessWidget {
-  double mass, speed;
-  SecondScreen({required this.mass, required this.speed});
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text("Кинетическая энергия"),
-        ),
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-            Padding(padding: EdgeInsets.only(top: 20), child:
-                        Text("Скорость объекта: $speed м/с",
-             style: TextStyle(fontSize: 20, color: Colors.purple),
-             ), ),
-            Padding(padding: EdgeInsets.only(top: 20), child:
-                        Text("Масса объекта: $mass кг",
-             style: TextStyle(fontSize: 20, color: Colors.purple),
-             ), ),
-            Padding(padding: EdgeInsets.only(top: 20), child:
-                        Text("Кинетическая энергия объекта: ${KineticEnergy(mass, speed)} ДЖ",
-             style: TextStyle(fontSize: 20, color: Colors.purple),
-             ), ),
-             Padding(padding: EdgeInsets.only(top: 20), child:
-            ElevatedButton(onPressed: () {Navigator.pop(context);}, child: Text("Закрыть экран"))),
-
-            ],
-          ) 
-        ),
-      ),
-    );
-  }
-}
