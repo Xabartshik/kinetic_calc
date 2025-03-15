@@ -33,6 +33,7 @@ final _formKey = GlobalKey<FormState>();
 final _fieldWeight = TextEditingController();
 final _fieldSpeed = TextEditingController();
 double energy = 0;
+double speed = 0;
 bool _agreementDataProcessing = false;
   Widget build(BuildContext context) {
     return Container(
@@ -71,8 +72,7 @@ bool _agreementDataProcessing = false;
               validator: (value) {
                 if (value!.isEmpty) return "Введите значение скорости";
                 try {
-                  double speed = double.parse(value);
-                  if (speed <= 0) return "Скорость должна быть больше 0";
+                  speed = double.parse(value);
                 } catch (e) {
                   return "Введите корректное число для скорости";
                 }
@@ -88,7 +88,7 @@ bool _agreementDataProcessing = false;
             ElevatedButton(onPressed: () {
               if (_formKey.currentState!.validate() & _agreementDataProcessing)
               {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => SecondScreen(mass: double.parse(_fieldWeight.text), speed: double.parse(_fieldSpeed.text))));
+                Navigator.push(context, MaterialPageRoute(builder: (context) => SecondScreen(mass: double.parse(_fieldWeight.text), speed: speed)));
               }
             }, child: const Text("Вычислить"))
           ],
