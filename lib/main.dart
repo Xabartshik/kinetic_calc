@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
-import 'second_screen.dart';
+
+import 'screens/first_screen.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'screens/cubit/energy_cubit.dart';
 void main() {
   runApp(const MainApp());
 }
@@ -10,92 +13,26 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text("Кинетическая энергия"),
-          shadowColor: Colors.purple,
-        ),
-        body: KineticEnergyForm(),
+      home: BlocProvider(
+        create: (context) => EnergyCubit(), // Создаем Cubit
+        child: const HomeScreen(),
       ),
     );
   }
 }
 
-class KineticEnergyForm extends StatefulWidget {
-  KineticEnergyForm({super.key});
+class HomeScreen extends StatelessWidget {
+  const HomeScreen({super.key});
 
   @override
-  _KineticEnergyFormState createState() => _KineticEnergyFormState();
-}
-
-class _KineticEnergyFormState extends State<KineticEnergyForm>{
-final _formKey = GlobalKey<FormState>();
-final _fieldWeight = TextEditingController();
-final _fieldSpeed = TextEditingController();
-double energy = 0;
-double speed = 0;
-bool _agreementDataProcessing = false;
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(8),
-      alignment: Alignment.center,
-      child: Form(
-        key: _formKey,
-        child: Column(
-          children: <Widget>[
-            Padding(padding: EdgeInsets.only(top: 20), child:
-                        const Text("Масса объекта, кг",
-             style: TextStyle(fontSize: 20, color: Colors.purple),
-             ), ),
-            TextFormField(
-              validator: (value) {
-                if (value!.isEmpty) return "Введите значение массы";
-                try {
-                  double mass = double.parse(value);
-                  if (mass <= 0) return "Масса должна быть больше 0";
-                } catch (e) {
-                  return "Введите корректное число для массы";
-                }
-                return null; // Возвращаем null, если ошибок нет
-              },
-              controller: _fieldWeight,
-              keyboardType: TextInputType.number,
-            ),
-            Padding(
-              padding: EdgeInsets.only(top: 20),
-              child: const Text(
-                "Скорость объекта, м/с",
-                style: TextStyle(fontSize: 20, color: Colors.purple),
-              ),
-            ),
-            TextFormField(
-              validator: (value) {
-                if (value!.isEmpty) return "Введите значение скорости";
-                try {
-                  speed = double.parse(value);
-                } catch (e) {
-                  return "Введите корректное число для скорости";
-                }
-                return null; // Возвращаем null, если ошибок нет
-              },
-              controller: _fieldSpeed,
-              keyboardType: TextInputType.number,
-            ),
-            CheckboxListTile(value: _agreementDataProcessing, 
-            title: Text("Я готов слить свои данные за 0 рублей в общий доступ"),
-            onChanged: (bool? value) => setState(() => _agreementDataProcessing = value!)),
-            const SizedBox(height: 20),
-            ElevatedButton(onPressed: () {
-              if (_formKey.currentState!.validate() & _agreementDataProcessing)
-              {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => SecondScreen(mass: double.parse(_fieldWeight.text), speed: speed)));
-              }
-            }, child: const Text("Вычислить"))
-          ],
-        ),
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Кинетическая энергия"),
+        shadowColor: Colors.purple,
       ),
+      body: KineticEnergyForm(),
     );
-    
   }
 }
 
