@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'cubit/energy_cubit.dart';
+
 double KineticEnergy(double mass, double speed)
 {
   return mass*speed*speed/2;
@@ -31,7 +34,10 @@ class SecondScreen extends StatelessWidget {
              style: TextStyle(fontSize: 20, color: Colors.purple),
              ), ),
              Padding(padding: EdgeInsets.only(top: 20), child:
-            ElevatedButton(onPressed: () {Navigator.pop(context);}, child: Text("Закрыть экран"))),
+            ElevatedButton(onPressed: () {
+              context.read<EnergyCubit>().saveCalculation(mass, speed);
+              Navigator.pop(context);
+              }, child: Text("Закрыть экран"))),
 
             ],
           ) 

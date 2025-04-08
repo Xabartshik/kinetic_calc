@@ -1,7 +1,10 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class EnergyCubit extends Cubit<EnergyState> {
   EnergyCubit() : super(EnergyState.initial());
+
+  static const String _calculationsKey = 'saved_calculations';
 
   void updateMass(double mass) {
     emit(state.copyWith(mass: mass));
@@ -13,6 +16,27 @@ class EnergyCubit extends Cubit<EnergyState> {
 
   void toggleAgreement(bool isAgreed) {
     emit(state.copyWith(isAgreed: isAgreed));
+  }
+
+  // Сохраняем расчёт в SharedPreferences
+  Future<void> saveCalculation(double mass, double speed) async {
+    final prefs = await SharedPreferences.getInstance();
+    final calculations = prefs.getStringList(_calculationsKey) ?? [];
+    calculations.add(
+      'Масса: $mass кг, Скорость: $speed м/с → Энергия: ${_calculateEnergy(mass, speed)} Дж',
+    );
+    await prefs.setStringList(_calculationsKey, calculations);
+  }
+
+  // Загружаем историю расчётов
+  Future<List<String>> loadCalculations() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getStringList(_calculationsKey) ?? [];
+  }
+
+  // Формула кинетической энергии
+  double _calculateEnergy(double mass, double speed) {
+    return mass * speed * speed / 2;
   }
 }
 
