@@ -18,6 +18,12 @@ class EnergyCubit extends Cubit<EnergyState> {
     emit(state.copyWith(isAgreed: isAgreed));
   }
 
+/*
+Future — это объект в Dart, который представляет собой результат асинхронной операции, которая может завершиться успешно с результатом или завершиться с ошибкой. 
+Это позволяет выполнять долгие операции (например, запросы к базе данных или сети) без блокировки основного потока выполнения.
+*/
+
+
   // Сохраняем расчёт в SharedPreferences
   Future<void> saveCalculation(double mass, double speed) async {
     final prefs = await SharedPreferences.getInstance();
