@@ -28,7 +28,7 @@ class HistoryScreen extends StatelessWidget {
           if (snapshot.hasError || snapshot.data!.isEmpty) {
             return const Center(child: Text('Нет сохранённых расчётов'));
           }
-          //Создаем список, в который будут помещаться карточки с информацией о вычислениях
+          //Создаем список, в который будут помещаться карточки с информацией о вычислениях (вроде ListView позволяет переиспользовать память)
           return ListView.builder(
             itemCount: snapshot.data!.length,
             itemBuilder: (context, index) {

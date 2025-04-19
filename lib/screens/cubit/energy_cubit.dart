@@ -27,6 +27,7 @@ Future — это объект в Dart, который представляет 
   // Сохраняем расчёт в SharedPreferences
   Future<void> saveCalculation(double mass, double speed) async {
     final prefs = await SharedPreferences.getInstance();
+    //Если не null, то слева, иначе справа
     final calculations = prefs.getStringList(_calculationsKey) ?? [];
     calculations.add(
       'Масса: $mass кг, Скорость: $speed м/с → Энергия: ${_calculateEnergy(mass, speed)} Дж',

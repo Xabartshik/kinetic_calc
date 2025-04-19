@@ -6,6 +6,7 @@ plugins {
 }
 
 android {
+    
     namespace = "com.example.kinetic_calc"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
